@@ -9,7 +9,6 @@ class PrepareText(Flow):
 
     def __call__(self, text):
         result = self.start_from(self.extract_words, text=text)
-
         return result.words_data
 
     @step(None)
@@ -30,7 +29,9 @@ class PrepareText(Flow):
     def filter_stop_words(self, words):
         stop_words = set(stopwords.words('english'))
         words = [w for w in words if not w in stop_words]
-        return dict(words=words)
+        return dict(
+            words=words
+        )
 
     @step(filter_stop_words)
     def extract_words(self, text):
@@ -51,6 +52,7 @@ class FilterComments(Flow):
             type=type,
             words=words,
         )
+        return dict()
 
     @step(None)
     def ensure_topic_related(self, words):
