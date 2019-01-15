@@ -5,7 +5,8 @@ from hacker_news.flows.cleanup import PrepareText, FilterComments
 from hacker_news.flows.stats import (CalculateSentiment,
                                      CalculateMentionedLibs)
 
-from hacker_news.consumers import save_topic_related_data, aggregate_value
+from hacker_news.consumers import (save_topic_related_data,
+                                   aggregate_average_value)
 
 
 @app.pipeline(config=dict(filter_comments=dict(topic='python')))
@@ -31,11 +32,13 @@ def calculate_stats(pipeline, score, time, text, words):
     sentiment = text\
         .apply_flow(CalculateSentiment(), as_worker=True) \
         .make(value="sentiment") \
-        .subscribe_consumer(aggregate_value)
+        .add_value(agregation_name="sentiment")\
+        .subscribe_consumer(aggregate_average_value)
 
     libs = data\
         .apply_flow(CalculateMentionedLibs()) \
         .make(value="libs") \
-        .subscribe_consumer(aggregate_value)
+        .add_value(agregation_name="libs") \
+        .subscribe_consumer(aggregate_average_value)
 
     return concatenate(sentiment=sentiment, libs=libs)
