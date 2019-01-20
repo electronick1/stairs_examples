@@ -13,15 +13,15 @@ TRAIN_WORD2VEC_CONFIG = dict(
 @app.pipeline(config=TRAIN_WORD2VEC_CONFIG)
 def review_to_words(pipeline, review):
     return review\
-        .subscribe_flow_as_generator(SplitToSentences()) \
-        .subscribe_flow(pipeline.config.clean_up_sentence)
+        .subscribe_flow_as_producer(SplitToSentences()) \
+        .subscribe_flow(pipeline.config['clean_up_sentence'])
 
 
 @app.pipeline()
 def train_word2vec(pipeline, review):
     return review\
         .subscribe_pipeline(review_to_words)\
-        .subscribe_output(fit_to_word2vec)
+        .subscribe_consumer(fit_to_word2vec)
 
 
 

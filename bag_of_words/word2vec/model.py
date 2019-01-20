@@ -11,7 +11,13 @@ def train_word2vec():
     print("Training Word2Vec model...")
     config = app.config
 
-    model = Word2Vec(fit_to_word2vec(),
+    sentences = []
+    for s in fit_to_word2vec():
+        sentences.append(s)
+        if len(sentences) > 20000:
+            break
+
+    model = Word2Vec(sentences,
                      workers=config.num_workers,
                      size=config.num_features,
                      min_count=config.min_word_count,
@@ -39,8 +45,3 @@ def train_kmean():
     word_centroid_map = dict(zip(model.wv.index2word, idx))
 
     pickle.dump(word_centroid_map, app.config.word_centroid_map_path)
-
-
-if __name__ == "__main__":
-    train_word2vec()
-    train_kmean()

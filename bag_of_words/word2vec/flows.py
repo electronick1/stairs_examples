@@ -36,8 +36,8 @@ class SplitToSentences(Flow):
 
 class SentenceToWordlist(Flow):
 
-    def __init__(self, remove_stopwords=True):
-        self.remove_stopwords = remove_stopwords
+    def __init__(self, needs_stopwords=False):
+        self.needs_stopwords = needs_stopwords
 
     def __call__(self, sentence):
         r = self.start_from(self.apply_beautiful_soup, sentence=sentence)
@@ -47,7 +47,7 @@ class SentenceToWordlist(Flow):
     @step(None)
     def remove_stopwords(self, words):
         # 4. Optionally remove stop words (false by default)
-        if self.remove_stopwords:
+        if not self.needs_stopwords:
             stops = set(stopwords.words("english"))
             words = [w for w in words if not w in stops]
 

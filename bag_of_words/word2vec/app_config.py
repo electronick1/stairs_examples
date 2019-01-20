@@ -12,3 +12,6 @@ train_word2vec_config = dict(
     model_path='300features_40minwords_10context',
     word_centroid_map_path='word_centroid_map.pickle',
 )
+
+app.config.update(train_word2vec_config)
+app.config.update(unlabeled_data_path='data/unlabeledTrainData.tsv')

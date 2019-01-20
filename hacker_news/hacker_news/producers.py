@@ -5,7 +5,7 @@ from hacker_news.app_config import app
 from hacker_news.pipelines import cleanup_and_save_localy, calculate_stats
 
 
-QUERY_LIMIT = 10
+QUERY_LIMIT = 10000
 
 
 @app.producer(cleanup_and_save_localy)
