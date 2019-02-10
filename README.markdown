@@ -1,10 +1,13 @@
 
-##Stairs examples living here
+## Stairs examples living here
 
 
-###Projects:
+### Projects:
 
 **Hacker News**
+
+You can find in this example some basic information about
+stairs components.
 
 It's a good example of statistic and analytic problems. Here we could
 easily grab a ton of data from Google Cloud and calculate any stats

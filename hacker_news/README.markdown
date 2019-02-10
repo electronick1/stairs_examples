@@ -1,7 +1,7 @@
 
-##Hacker news example.
+## Hacker news example.
 
-###The problem:
+### The problem:
 
 - Read X amount of data from Google Cloud
 - Cleanup, filter and save localy hacker news posts
@@ -16,7 +16,7 @@ Should be:
 if data has changed.
 
 
-###Solution:
+### Solution:
 
 
 **Step1. Reading and cleanup data**

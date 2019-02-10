@@ -45,3 +45,9 @@ def train_kmean():
     word_centroid_map = dict(zip(model.wv.index2word, idx))
 
     pickle.dump(word_centroid_map, app.config.word_centroid_map_path)
+
+
+if __name__ == "__main__":
+    pass
+    #train_word2vec()
+    #train_kmean()
