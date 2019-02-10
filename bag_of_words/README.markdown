@@ -1,5 +1,5 @@
 
-## Bag of workd example.
+## Bag of words example.
 
 (!) Under development
 
@@ -9,7 +9,7 @@ You can find whole description here
 
 https://www.kaggle.com/c/word2vec-nlp-tutorial
 
-The idea - based on movies reviews data predict if
+Idea in short: based on movies reviews, predict if
 review is positive or negative (using sentiment analysis)  
 
 
@@ -26,8 +26,6 @@ In the tutorial above we should prepare data for 3 models:
 - Word2Vec
 - Kmeans
 - BagofWords (Random Forest)
-
-For all of them we should read and prepare data. 
 
 In this example we are using 
 'review_to_words' pipeline, which could be called from
