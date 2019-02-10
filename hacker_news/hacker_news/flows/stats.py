@@ -1,10 +1,13 @@
 from textblob import TextBlob
-
 from stairs import Flow, step
+
+# See `cleanup` flow if you want to know basic information about Flow components
 
 
 class CalculateSentiment(Flow):
-
+    """
+    Flow to calculate sentiment values.
+    """
     def __call__(self, text):
         result = self.start_from(self.make_blob, text=text)
         return result.average_sentiment
@@ -26,6 +29,9 @@ class CalculateSentiment(Flow):
 
 
 class CalculateMentionedLibs(Flow):
+    """
+    Flow to calculate mentions of some libs in hacker_news posts.
+    """
 
     SCORE_INTERVALS = {
         'null': 1,
