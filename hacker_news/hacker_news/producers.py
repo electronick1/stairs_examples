@@ -88,10 +88,9 @@ def read_batch(client, batch_id):
     """
     query = """
     SELECT score, time, type, text
-    FROM `bigquery-public-data.hacker_news.full`
-    OFFSET %s 
-    LIMIT %s;
-    """ % (batch_id * BATCH_SIZE, BATCH_SIZE)
+    FROM `bigquery-public-data.hacker_news.full` 
+    LIMIT %s OFFSET %s;
+    """ % (BATCH_SIZE, batch_id * BATCH_SIZE)
 
     query_job = client.query(query)
     iterator = query_job.result(timeout=30)
@@ -100,6 +99,6 @@ def read_batch(client, batch_id):
         yield dict(
             score=row[0],
             time=row[1],
-            type=row[2],
             text=row[3],
+            words=row[4]
         )
