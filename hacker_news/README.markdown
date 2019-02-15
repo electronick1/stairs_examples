@@ -1,5 +1,14 @@
-
 ## Hacker news example.
+
+### Installation:
+
+```bash
+pip install -r req.pip
+```
+
+Please set GOOGLE_APPLICATION_CREDENTIALS or explicitly create credentials.  
+For more information, please see https://cloud.google.com/docs/authentication/getting-started
+
 
 ### The problem:
 
