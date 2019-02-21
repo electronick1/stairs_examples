@@ -21,6 +21,22 @@ and calculate different values based on topic.
 [Check it out](https://github.com/electronick1/stairs_examples/tree/master/hacker_news)
 
 
+**Kaggle to Github**
+
+This project is about parsing and how stairs could help you
+extract data from any source.<br>
+
+The main goal is to parse kaggle competions and link them to
+github repositories (which were mentioned inside.)
+
+In this example you can see all power of Flow components and 
+data pipelines itself.
+
+Note: we are considering to make some pipelines compatible with
+python async, which will improve experience with such tasks/projects.
+
+
+
 **Bag of words**
 
 Is basic example of ML algorithms for solving text/nlp problems.
