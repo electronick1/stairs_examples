@@ -18,7 +18,7 @@ The idea to grab some data from Google Cloud about Hacker News post
 and calculate different values based on topic. 
 
 
-[Check it out]()
+[Check it out](https://github.com/electronick1/stairs_examples/tree/master/hacker_news)
 
 
 **Bag of words**
@@ -37,5 +37,5 @@ could instantly became a production ready enviroment,  it's always
 easy to tune and change the logic and it's always ready for big amount of
 data.
 
-[Check it out]() 
+[Check it out](https://github.com/electronick1/stairs_examples/tree/master/bag_of_words) 
 

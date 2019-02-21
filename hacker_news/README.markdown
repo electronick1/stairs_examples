@@ -7,7 +7,7 @@ pip install -r req.pip
 ```
 
 Please set GOOGLE_APPLICATION_CREDENTIALS or explicitly create credentials.  
-For more information, please see https://cloud.google.com/docs/authentication/getting-started
+For more information, please visit https://cloud.google.com/docs/authentication/getting-started
 
 
 ### The problem:
@@ -41,7 +41,7 @@ your CPU available.
 First approach could be realized by "app.producer" component. Which will
 send one request, and iterate over response.
 
-Checkout -> 
+[Checkout](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/producers.py#L17) 
 
 To run this producer type:
 
@@ -67,17 +67,17 @@ read those batches. The overall system if quite safe from data lost:
 
 `python manager.py producer:process hacker_news.read_google_big_table_parallel`
 
-Both producers control queue size, and prevent memory overflow.
+Both producers - control queue size and prevent memory overflow.
 
 
-**Now** when start reading process in the same time you can start
+**Now** when reading process had started in the same time you can start
 data processing, for this just run:
 
 `python manager.py pipelines:run`
 
 It will start reading queue based on defined pipeline [here]()
 
-As you can see in [cleanup_and_save_localy](function) pipeline
+As you can see in [cleanup_and_save_localy](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13) pipeline
 got multiple vars and:
 - combine them to one DataFrame
 - assign "Cleanup" flow, which will process text info
@@ -97,13 +97,13 @@ data on one of your machine. Just run:
 Now when we cleanup and filter data, we could calculate any stats 
 we want.
 
-Let's read it first -> []()
+[Let's read it first](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/producers.py#L48)
 
 Now we made a pipeline which allows to calculate this data in "parallel"
 way, just marked some subscribe/apply function "as_worker".
 
 
-Checkout whole pipeline -> 
+[Checkout whole pipeline](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L56)
 
 In the end we could save stats in redis using simple "consumer" which will be
 run inside "pipelines:run" (don't need special process for this.)
