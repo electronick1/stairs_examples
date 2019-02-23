@@ -2,6 +2,8 @@ import json
 import re
 import requests
 
+import urllib.parse
+
 from bs4 import BeautifulSoup
 
 from stairs.core.flow import Flow, step
@@ -18,13 +20,12 @@ class ExtractKagglePageSource(Flow):
         text = parsed_html.body.find('div', div_attrs).text
 
         m = re.search(self.JSON_DATA_REGEX, text)
-        json_data = m.group(0)
-
+        json_data = m.group(0)[len(".push("):-len(");performance")]
         return dict(json_data=json.loads(json_data))
 
     @step(get_json_data)
     def get_html(self, url):
-        return dict(html=requests.get(url).text())
+        return dict(html=requests.get(url).text)
 
 
 class ExtractCompetitions(ExtractKagglePageSource):
@@ -34,7 +35,7 @@ class ExtractCompetitions(ExtractKagglePageSource):
                             url=competitions_url)
 
         # return a list because it's a Flow based producer
-        return r.extract_names_and_urls.competitions
+        return r.extract_names_and_urls['competitions']
 
     def __reconnect__(self):
         self.get_json_data.set_next(self.extract_names_and_urls)
@@ -49,6 +50,8 @@ class ExtractCompetitions(ExtractKagglePageSource):
                 for competition in group['competitions']:
                     title = competition['competitionTitle']
                     url = competition['competitionUrl']
+                    url = urllib.parse.urljoin('https://kaggle.com', url)
+
                     competitions.append(dict(c_title=title, c_url=url))
 
         return dict(competitions=competitions)
@@ -65,13 +68,14 @@ class ExtractDiscussions(ExtractKagglePageSource):
         return r.extract_discussions_urls.discussions_urls
 
     def __reconnect__(self):
-        self.get_json_data.set_next(self.extract_names_and_urls)
+        self.get_json_data.set_next(self.extract_discussions_urls)
 
     @step(None)
     def extract_discussions_urls(self, json_data):
         d_urls = []
         for d_data in json_data['discussionTeaser']:
-            d_urls.append(dict(discussion_url=d_data['itemUrl']))
+            url = urllib.parse.urljoin('https://kaggle.com', d_data['itemUrl'])
+            d_urls.append(dict(discussion_url=url))
 
         return dict(discussions_urls=d_urls)
 

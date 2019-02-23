@@ -56,7 +56,7 @@ We have 2 generators:
 - first makes "batches".
 - second process each batch in parallel way.
 
-Checkout ->    
+[Checkout](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/producers.py#L64)
 
 To generate "batches" run (it should be done once):
 
@@ -70,12 +70,12 @@ read those batches. The overall system if quite safe from data lost:
 Both producers - control queue size and prevent memory overflow.
 
 
-**Now** when reading process had started in the same time you can start
+**Now** when reading process had been started in the same time you can start
 data processing, for this just run:
 
 `python manager.py pipelines:run`
 
-It will start reading queue based on defined pipeline [here]()
+It will start reading queue based on defined pipeline [here](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13)
 
 As you can see in [cleanup_and_save_localy](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13) pipeline
 got multiple vars and:
