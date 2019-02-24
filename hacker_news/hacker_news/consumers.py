@@ -20,7 +20,7 @@ def save_topic_related_data(score, time, type, text, words, stemmed_words):
     in "one place" or write it file.
 
     Run:
-    `python manager.py consumer:standalone hacker_news.save_topic_related_data`
+    `python manage.py consumer:standalone hacker_news.save_topic_related_data`
 
     To start reading queue/streaming service.
     """

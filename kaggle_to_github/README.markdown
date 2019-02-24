@@ -54,20 +54,20 @@ a worker and everything will be executed in a parallel way.
 To make everything work just run producer:
 
 ```bash
-python manager.py producer:process start_kaggle_parsing
+python manage.py producer:process start_kaggle_parsing
 ```
 
 And then start pipelines execution:
 
 ```bash
-python manager.py pipelines:run
+python manage.py pipelines:run
 ```
 
 ^ this is only one process which will be boring to run, you can specified amount
 of processes and try to burn out your CPU :)
 
 ```python
-python manager.py pipelines:run concurrency 100
+python manage.py pipelines:run concurrency 100
 ```
 ^ This command will run 100 processes which will send a ton of requests to kaggle.
 

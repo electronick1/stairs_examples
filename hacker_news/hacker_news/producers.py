@@ -69,10 +69,10 @@ def read_google_big_table_parallel():
     See -> http://stairspy.com/#producer for more info.
 
     You should init batches by calling:
-    `python manager.py producer:init_session hacker_news.read_google_big_table_parallel`
+    `python manage.py producer:init_session hacker_news.read_google_big_table_parallel`
 
     And then to start reading each batch (in parallel way):
-    `python manager.py producer:process hacker_news.read_google_big_table_parallel`
+    `python manage.py producer:process hacker_news.read_google_big_table_parallel`
     """
     client = bigquery.Client()
 

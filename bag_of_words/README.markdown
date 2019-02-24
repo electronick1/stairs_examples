@@ -45,10 +45,10 @@ consumer. The whole data initialization process looks like
 this:
 
 Start data producer: <br>
-`python manager.py producer:process bag_of_words.read_train_data_for_word2vec`
+`python manage.py producer:process bag_of_words.read_train_data_for_word2vec`
 
 Start pipelines processes: <br>
-`python manager.py pipelines:run`
+`python manage.py pipelines:run`
 
 Start Word2Vec training:
 `python word2vec/model.py train_word2vec`
@@ -63,10 +63,10 @@ When Word2Vec done, you can start Kmean training:
 The process is similar to Word2Vec training:
 
 Start data producer: <br>
-`python manager.py producer:process bag_of_words.read_train_data_for_bagofwords`
+`python manage.py producer:process bag_of_words.read_train_data_for_bagofwords`
 
 Start pipelines processes: <br>
-`python manager.py pipelines:run`
+`python manage.py pipelines:run`
 
 Start RandomForest training:
 `python bag_of_words/model.py`

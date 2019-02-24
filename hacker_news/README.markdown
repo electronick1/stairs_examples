@@ -45,7 +45,7 @@ send one request, and iterate over response.
 
 To run this producer type:
 
-`python manager.py producer:process hacker_news.read_google_big_table`
+`python manage.py producer:process read_google_big_table`
 
 
 
@@ -60,12 +60,12 @@ We have 2 generators:
 
 To generate "batches" run (it should be done once):
 
-` python manager.py producer:init_session hacker_news.read_google_big_table_parallel`
+` python manage.py producer:init_session read_google_big_table_parallel`
 
 Then you can run as many "workers" you want, which will 
 read those batches. The overall system if quite safe from data lost:
 
-`python manager.py producer:process hacker_news.read_google_big_table_parallel`
+`python manage.py producer:process read_google_big_table_parallel`
 
 Both producers - control queue size and prevent memory overflow.
 
@@ -73,7 +73,7 @@ Both producers - control queue size and prevent memory overflow.
 **Now** when reading process had been started in the same time you can start
 data processing, for this just run:
 
-`python manager.py pipelines:run`
+`python manage.py pipelines:run`
 
 It will start reading queue based on defined pipeline [here](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13)
 
@@ -89,7 +89,7 @@ There is standalone_consumer, which allow you to process data in separate
 process, in case you have distributed system, it's allow you to save
 data on one of your machine. Just run:
 
-`python manager.py consumer:standalone hacker_news.save_topic_related_data`
+`python manage.py consumer:standalone save_topic_related_data`
 
 
 **Step2. Reading and cleanup data**
