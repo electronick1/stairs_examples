@@ -13,7 +13,7 @@ For more information, please visit https://cloud.google.com/docs/authentication/
 ### The problem:
 
 - Read X amount of data from Google Cloud
-- Cleanup, filter and save localy hacker news posts
+- Cleanup, filter and save localy (hacker news posts)
 - Based on clean data calculate "sentiment" and "mentions" stats
 
 
@@ -30,11 +30,11 @@ if data has changed.
 
 **Step1. Reading and cleanup data**
 
-We could read data from google cloud in two ways:
+We can read data from google cloud in two ways:
 
-- one process which will ask google for data and then add items to
+- Using one process, which will ask google for data and then adds items to
 streaming service (workers)
-- multiple processes which will in parallel punch google as many of 
+- Using multiple processes, which will in parallel punch google as much of 
 your CPU available.
 
 
@@ -45,7 +45,7 @@ send one request, and iterate over response.
 
 To run this producer type:
 
-`python manage.py producer:process read_google_big_table`
+`python manage.py producer:run read_google_big_table`
 
 
 
@@ -60,12 +60,16 @@ We have 2 generators:
 
 To generate "batches" run (it should be done once):
 
-` python manage.py producer:init_session read_google_big_table_parallel`
+` python manage.py producer:run read_google_big_table_parallel`
 
-Then you can run as many "workers" you want, which will 
-read those batches. The overall system if quite safe from data lost:
+When producer finished baches generation, it will automatically read
+batches of data from google cloud. Then you can run as many "workers" 
+you want, which will read those batches.
+The overall system if quite safe from data lost:
 
-`python manage.py producer:process read_google_big_table_parallel`
+`python manage.py producer:run_jobs read_google_big_table_parallel`<br>
+or<br>
+`python manage.py producer:run_jobs read_batch`
 
 Both producers - control queue size and prevent memory overflow.
 
@@ -76,6 +80,12 @@ data processing, for this just run:
 `python manage.py pipelines:run`
 
 It will start reading queue based on defined pipeline [here](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13)
+
+You can run pipelines in parallel way simply define amount of processes which you
+want to start:
+
+`python manage.py pipelines:run -p 10` <br>
+It will run 10 parallel processes
 
 As you can see in [cleanup_and_save_localy](https://github.com/electronick1/stairs_examples/blob/master/hacker_news/hacker_news/pipelines.py#L13) pipeline
 got multiple vars and:
@@ -171,4 +181,3 @@ class MyPrepareText(PrepareText):
 ```
 
 Then replace this flow in pipeline (or paste inside config). 
- 

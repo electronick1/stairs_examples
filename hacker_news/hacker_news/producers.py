@@ -12,6 +12,8 @@ QUERY_LIMIT = 10000
 AMOUNT_OF_BATCHES = 10
 BATCH_SIZE = 10
 
+client = bigquery.Client()
+
 
 @app.producer(cleanup_and_save_localy)
 def read_google_big_table():
@@ -24,7 +26,7 @@ def read_google_big_table():
 
     You can have multiple "next" pipelines.
     """
-    client = bigquery.Client()
+    global client
 
     query = """
     SELECT score, time, type, text
@@ -37,18 +39,20 @@ def read_google_big_table():
 
     for row in iterator:
         yield dict(
-            score=row[0],
-            time=row[1],
-            type=row[2],
-            text=row[3],
+            score=row.get('score'),
+            time=row.get('time'),
+            type=row.get('type'),
+            text=row.get('text')
         )
 
 
 @app.producer(cleanup_and_save_localy)
-def read_batch(client, batch_id):
+def read_batch(batch_id):
     """
     Reading each batch of data
     """
+    global client
+
     query = """
     SELECT score, time, type, text
     FROM `bigquery-public-data.hacker_news.full` 
@@ -60,10 +64,10 @@ def read_batch(client, batch_id):
 
     for row in iterator:
         yield dict(
-            score=row[0],
-            time=row[1],
-            text=row[3],
-            words=row[4]
+            score=row.get('score'),
+            time=row.get('time'),
+            type=row.get('type'),
+            text=row.get('text')
         )
 
 
@@ -98,9 +102,8 @@ def read_google_big_table_parallel():
     And then to start reading each batch (in parallel way):
     `python manage.py producer:run_jobs read_batch`
     """
-    client = bigquery.Client()
 
     for i in range(AMOUNT_OF_BATCHES):
-        yield dict(client=client, batch_id=i)
+        yield dict(batch_id=i)
 
 

@@ -6,16 +6,14 @@
 
 **Hacker News**
 
-You can find in this example some basic information about
-stairs components.
-
-It's a good example of statistic and analytic problems. Here we could
-easily grab a ton of data from Google Cloud and calculate any stats
-values which we want. Stairs will make calculations in parallel way. 
-And it's quite safe (no reason to lose, duplicate your data).
+It's a good example of statistic and analytic problems. Here we are trying
+to grab a ton of data from Google Cloud and calculate some stats
+values. Stairs will make calculations in parallel way.
 
 The idea to grab some data from Google Cloud about Hacker News post
-and calculate different values based on topic. 
+and calculate different values based on threads topics. You will find 
+some tips about `batch_producer`, pipelines configs and general information
+about Stairs components.
 
 
 [Check it out](https://github.com/electronick1/stairs_examples/tree/master/hacker_news)
@@ -26,8 +24,8 @@ and calculate different values based on topic.
 This project is about parsing and how stairs could help you
 extract data from any source.<br>
 
-The main goal is to parse kaggle competions and link them to
-github repositories (which were mentioned inside.)
+The main goal is to parse kaggle competitions and link them to
+github repositories (which were mentioned inside)
 
 In this example you can see all power of Flow components and 
 data pipelines itself.
@@ -35,6 +33,7 @@ data pipelines itself.
 Note: we are considering to make some pipelines compatible with
 python async, which will improve experience with such tasks/projects.
 
+[Check it out](https://github.com/electronick1/stairs_examples/tree/master/kaggle_to_github)
 
 
 **Bag of words**
