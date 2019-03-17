@@ -44,44 +44,7 @@ def read_google_big_table():
         )
 
 
-@app.producer(calculate_stats)
-def read_top_file():
-    """
-    Just simple generator which read file, and convert it to dict format for
-    `calculate_stats` pipeline
-    """
-    with open("local_topic_related_data.csv", "r") as f:
-        for row in csv.reader(f):
-            yield dict(
-                score=row[0],
-                time=row[1],
-                text=row[3],
-                words=row[4]
-            )
-
-
-@app.worker_producer(cleanup_and_save_localy)
-def read_google_big_table_parallel():
-    """
-    Worker producer it's a way to read data in parallel way.
-
-    This function yields generators which will read each batch of data.
-    See -> http://stairspy.com/#producer for more info.
-
-    You should init batches by calling:
-    `python manage.py producer:init_session hacker_news.read_google_big_table_parallel`
-
-    And then to start reading each batch (in parallel way):
-    `python manage.py producer:process hacker_news.read_google_big_table_parallel`
-    """
-    client = bigquery.Client()
-
-    for i in range(AMOUNT_OF_BATCHES):
-        yield read_batch(client, i)
-
-
-# UTILS
-
+@app.producer(cleanup_and_save_localy)
 def read_batch(client, batch_id):
     """
     Reading each batch of data
@@ -102,3 +65,42 @@ def read_batch(client, batch_id):
             text=row[3],
             words=row[4]
         )
+
+
+@app.producer(calculate_stats)
+def read_top_file():
+    """
+    Just simple generator which read file, and convert it to dict format for
+    `calculate_stats` pipeline
+    """
+    with open("local_topic_related_data.csv", "r") as f:
+        for row in csv.reader(f):
+            yield dict(
+                score=row[0],
+                time=row[1],
+                text=row[3],
+                words=row[4]
+            )
+
+
+@app.batch_producer(read_batch)
+def read_google_big_table_parallel():
+    """
+    Batch producer it's a way to read data in parallel way.
+
+    This function yields data to another producers using queue/streaming service,
+    which then reads each batch of data.
+    See -> http://stairspy.com/#producer for more info.
+
+    You should init batches by calling:
+    `python manage.py producer:run read_google_big_table_parallel`
+
+    And then to start reading each batch (in parallel way):
+    `python manage.py producer:run_jobs read_batch`
+    """
+    client = bigquery.Client()
+
+    for i in range(AMOUNT_OF_BATCHES):
+        yield dict(client=client, batch_id=i)
+
+
