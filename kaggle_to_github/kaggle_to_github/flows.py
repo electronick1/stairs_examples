@@ -1,7 +1,7 @@
 import json
 import re
 import requests
-
+import datetime
 import urllib.parse
 
 from bs4 import BeautifulSoup
@@ -40,25 +40,24 @@ class ExtractKagglePageSource(Flow):
         return dict(html=requests.get(url).text)
 
 
-class ExtractCompetitions(ExtractKagglePageSource):
+class ExtractCompetitions(Flow):
     """
     This flow makes request to kaggle competitions page and parse list of
     competitions.
     """
+
+    def __init__(self, cnt_pages):
+        self.cnt_pages = cnt_pages
+
     def __call__(self, competitions_url):
         print("Start competitions parsing")
-        r = self.start_from(self.get_html,
-                            url=competitions_url)
+        r = self.start_from(self.extract_json_data,
+                            competitions_url=competitions_url)
 
         # return a list because it's a Flow based producer
         # each list has dict with c_title and c_url
+        print("COMPETITIONS:", len(r.extract_names_and_urls['competitions']))
         return r.extract_names_and_urls['competitions']
-
-    def __reconnect__(self):
-        """
-        Here we connecting base "html parsing" flow with `extract_names_and_urls`
-        """
-        self.get_json_data.set_next(self.extract_names_and_urls)
 
     @step(None)
     def extract_names_and_urls(self, json_data):
@@ -66,8 +65,8 @@ class ExtractCompetitions(ExtractKagglePageSource):
         Extracting competitions urls.
         """
         competitions = []
-
         competitions_groups = json_data['fullCompetitionGroups']
+        competitions_groups.append(json_data['pagedCompetitionGroup'])
         for group in competitions_groups:
             if 'competitions' in group:
                 for competition in group['competitions']:
@@ -78,6 +77,12 @@ class ExtractCompetitions(ExtractKagglePageSource):
                     competitions.append(dict(c_title=title, c_url=url))
 
         return dict(competitions=competitions)
+
+    @step(extract_names_and_urls)
+    def extract_json_data(self, competitions_url):
+        r = requests.get(competitions_url)
+
+        return dict(json_data=r.json())
 
 
 class ExtractDiscussions(ExtractKagglePageSource):
@@ -137,3 +142,45 @@ class SearchForGHRepos(ExtractKagglePageSource):
         urls = re.findall(GH_URL_REGEX, html)
         github_urls = [url for url in urls if "github.com" in url]
         return dict(github_urls=[dict(gh_url=url) for url in github_urls])
+
+
+class MentionsKaggle(ExtractKagglePageSource):
+    """
+    Flow for extracting github links from discussions pages
+    """
+
+    def __init__(self, terms):
+        self.terms = terms
+
+    def __call__(self, discussion_url):
+
+        print("Start repos parsing")
+        r = self.start_from(self.get_html, url=discussion_url)
+
+        # return a list because it's a Flow based producer
+        print(r.search_for_term, type(r.search_for_term))
+        return r.search_for_term
+
+    def __reconnect__(self):
+        # Now we are using html and skipping json transformation
+        self.get_html.set_next(self.get_json_data)
+        self.get_json_data.set_next(self.search_for_term)
+
+    @step(None)
+    def search_for_term(self, json_data):
+        """
+        Trying to find github page in comments.
+        """
+        if 'dateEnabled' not in json_data:
+            raise StopPipelineFlag()
+
+        date = json_data['dateEnabled'].split('T')[0]
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        json_str = json.dumps(json_data)
+        mentions = 0
+        for term in self.terms:
+            if term.lower() in json_str.lower():
+                mentions += 1
+
+        print("MENTIONS", mentions)
+        return dict(date=date, cnt_mentions=mentions)
