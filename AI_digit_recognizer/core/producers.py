@@ -10,7 +10,17 @@ from core.pipelines import prepare_image_for_nn
               repeat_on_signal=producer_signals.on_all_components_empty,
               repeat_times=app.config.num_epoch)
 def read_image():
-    with open('data/train.csv') as csv_file:
+    """
+    Reads data from a file and forward each image and label to
+    `prepare_image_for_nn` pipeline through streaming service.
+
+    Also `read_image` producer allows you to split data on 'training' and
+    'validation' datasets.
+
+    When all data in pipelines where consumed by neural network - producer
+    will repeat itself until amount of epochs specified in app config.
+    """
+    with open(app.config.train_data_file_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         # skip first line
         next(csv_reader)

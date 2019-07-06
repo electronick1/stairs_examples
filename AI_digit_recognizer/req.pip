@@ -1,0 +1,6 @@
+kaggle==1.5.4
+Keras==2.2.4
+imgaug==0.2.9
+tensorflow==1.14.0
+tqdm==4.32.2
+stairs-project==0.1.6

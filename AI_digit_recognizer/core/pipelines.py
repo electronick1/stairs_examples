@@ -13,6 +13,18 @@ from core.consumers import (deliver_train_data_to_model,
 
 @app.pipeline()
 def prepare_image_for_nn(pipeline, image, label, is_train_data):
+    """
+    Function which defines pipeline for images and labels processing.
+
+    It will apply batch of functions which will change images and labels
+    as soon as they appeared in streaming service.
+
+    Each of this function could be a separate "worker", you need just specify
+    `as_worker` flag.
+
+    In the end data will be forwarded to consumers which then comes to neural
+    network.
+    """
     return (concatenate(image=image, label=label, is_train_data=is_train_data)
 
             .subscribe_func(apply_normalization)

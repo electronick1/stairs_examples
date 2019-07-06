@@ -12,6 +12,10 @@ from core.consumers import deliver_train_data_to_model, deliver_validation_data_
 
 
 def get_model():
+    """
+    Neural network based on following example from kaggle:
+    https://www.kaggle.com/yassineghouzam/introduction-to-cnn-keras-0-997-top-6
+    """
     model = Sequential()
 
     model.add(Conv2D(filters=32, kernel_size=(5, 5), padding='Same',
@@ -43,6 +47,22 @@ def get_model():
 
 
 def train(model):
+    """
+    Training process.
+
+    Keras model will extract data from `deliver_train_data_to_model` consumer,
+    and fit to neural network using fit_generator.
+
+    After `steps_per_epoch` items, Keras will extract data from
+    `deliver_validation_data_to_model` consumer to validate last epoch.
+
+    When epoch finished and validation applied, both consumers will be empty
+    (queues in streaming services will be empty), then stairs producer
+    will repeat his self and generate new batch of data.
+
+    If something failed in pipelines, this process will be still alive and
+    waiting for a jobs.
+    """
     learning_rate_reduction = ReduceLROnPlateau(monitor='val_acc',
                                                 patience=3,
                                                 verbose=1,

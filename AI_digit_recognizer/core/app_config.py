@@ -6,6 +6,10 @@ from stairs import App
 app = App("core")
 
 app.config.update(dict(
+    train_data_file_path='data/train.csv'
+))
+
+app.config.update(dict(
     num_epoch=3,
     num_classes=10,
     steps_per_epoch=41990,
