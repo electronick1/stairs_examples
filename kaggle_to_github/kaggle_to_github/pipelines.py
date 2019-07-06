@@ -34,5 +34,4 @@ def parse_mentions(pipeline, competitions_url):
         .subscribe_flow_as_producer(ExtractDiscussions(), as_worker=True)\
         .subscribe_flow(MentionsKaggle(terms=['boosting']), as_worker=True)\
         .add_value(key="mentions_in_competitions")\
-        .rename(has_action='cnt_mentions')\
         .subscribe_consumer(aggregate_monthly)

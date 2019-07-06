@@ -81,7 +81,6 @@ class ExtractCompetitions(Flow):
     @step(extract_names_and_urls)
     def extract_json_data(self, competitions_url):
         r = requests.get(competitions_url)
-
         return dict(json_data=r.json())
 
 
